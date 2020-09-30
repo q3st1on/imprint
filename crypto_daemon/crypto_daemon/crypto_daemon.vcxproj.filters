@@ -15,27 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CryptoDaemon.cpp">
+    <ClCompile Include="crypto_daemon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="transaction\input.cpp">
+    <ClCompile Include="hash\sha512.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="transaction\output.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="transaction\transaction.cpp">
+    <ClCompile Include="hash\sha256.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="transaction\input.h">
+    <ClInclude Include="hash\sha512.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="transaction\output.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="transaction\transaction.h">
+    <ClInclude Include="hash\sha256.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

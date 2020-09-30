@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{286ad957-0c7d-462a-a98f-229974a6b1b7}</ProjectGuid>
-    <RootNamespace>CryptoDaemon</RootNamespace>
+    <ProjectGuid>{78b530c3-83cf-46c9-b808-fbb7ee9fb837}</ProjectGuid>
+    <RootNamespace>cryptodaemon</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,15 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CryptoDaemon.cpp" />
-    <ClCompile Include="transaction\output.cpp" />
-    <ClCompile Include="transaction\input.cpp" />
-    <ClCompile Include="transaction\transaction.cpp" />
+    <ClCompile Include="crypto_daemon.cpp" />
+    <ClCompile Include="hash\sha512.cpp" />
+    <ClCompile Include="hash\sha256.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="transaction\output.h" />
-    <ClInclude Include="transaction\input.h" />
-    <ClInclude Include="transaction\transaction.h" />
+    <ClInclude Include="hash\sha512.h" />
+    <ClInclude Include="hash\sha256.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
