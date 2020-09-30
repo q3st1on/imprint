@@ -1,8 +1,6 @@
 #include "sha256.h"
 
-#include <iostream>
-
-uint32_t pack(uint8_t byte1, uint8_t byte2, uint8_t byte3, uint8_t byte4) {
+uint32_t SHA256::pack(uint8_t byte1, uint8_t byte2, uint8_t byte3, uint8_t byte4) {
 	return byte1 << 0 |
 		byte2 << 8 |
 		byte3 << 16 |
@@ -49,7 +47,7 @@ std::vector<unsigned char> SHA256::final() {
 
 		for (int i = 0; i < 16; i++) {
 			int base = (chunk * 64) + (i * 4);
-			w[i] = pack(this->message[base + 3], this->message[base + 2], this->message[base + 1], this->message[base]);
+			w[i] = this->pack(this->message[base + 3], this->message[base + 2], this->message[base + 1], this->message[base]);
 		}
 
 		for (int i = 16; i < 64; i++) {
@@ -107,16 +105,17 @@ std::vector<unsigned char> SHA256::final() {
 
 	std::vector<unsigned char> final_digest;
 	for (int i = 0; i < 8; i++) {
-		uint32_t packed_data = digest[i];
-		unsigned char char1 = (packed_data & 0xff000000UL) >> 24;
-		unsigned char char2 = (packed_data & 0x00ff0000UL) >> 16;
-		unsigned char char3 = (packed_data & 0x0000ff00UL) >> 8;
-		unsigned char char4 = (packed_data & 0x000000ffUL);
-		final_digest.push_back(char1);
-		final_digest.push_back(char2);
-		final_digest.push_back(char3);
-		final_digest.push_back(char4);
+		uint64_t packed_data = digest[i];
+		for (int i = 0; i < 4; i++) {
+			final_digest.push_back((packed_data >> 8 * (7 - i)) & 0xFF);
+		}
 	}
 
 	return final_digest;
+}
+
+std::vector<unsigned char> SHA256::hash(std::vector<unsigned char> message) {
+	this->init();
+	this->update(message);
+	return this->final();
 }

@@ -26,8 +26,11 @@ class SHA256 {
 
 	std::vector<unsigned char> message;
 
+	uint32_t pack(uint8_t, uint8_t, uint8_t, uint8_t);
+
 public:
 	void init();
 	void update(std::vector<unsigned char>);
 	std::vector<unsigned char> final();
+	std::vector<unsigned char> hash(std::vector<unsigned char>);
 };
