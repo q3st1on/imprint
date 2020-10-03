@@ -26,9 +26,8 @@ class SHA256 {
 
 	std::vector<unsigned char> message;
 
-	uint32_t pack(uint8_t, uint8_t, uint8_t, uint8_t);
-
 public:
+	static uint32_t pack(uint8_t, uint8_t, uint8_t, uint8_t);
 	void init();
 	void update(std::vector<unsigned char>);
 	std::vector<unsigned char> final();

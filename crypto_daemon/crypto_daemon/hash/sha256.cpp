@@ -107,7 +107,7 @@ std::vector<unsigned char> SHA256::final() {
 	for (int i = 0; i < 8; i++) {
 		uint64_t packed_data = digest[i];
 		for (int i = 0; i < 4; i++) {
-			final_digest.push_back((packed_data >> 8 * (7 - i)) & 0xFF);
+			final_digest.push_back((packed_data >> 8 * (3 - i)) & 0xFF);
 		}
 	}
 

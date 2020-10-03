@@ -139,13 +139,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="unit_tests\tests\hash\sha512_test.cpp" />
+    <ClCompile Include="unit_tests\tests\hash\sha256_test.cpp" />
+    <ClCompile Include="unit_tests\tests\bigint_test.cpp" />
+    <ClCompile Include="bigint\bigint.cpp" />
     <ClCompile Include="crypto_daemon.cpp" />
+    <ClCompile Include="ed25519\ed25519.cpp" />
     <ClCompile Include="hash\sha512.cpp" />
     <ClCompile Include="hash\sha256.cpp" />
+    <ClCompile Include="ed25519\keypair.cpp" />
+    <ClCompile Include="unit_tests\unit_test.cpp" />
+    <ClCompile Include="unit_tests\unit_tests.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="unit_tests\tests\hash\sha512_test.h" />
+    <ClInclude Include="unit_tests\tests\hash\sha256_test.h" />
+    <ClInclude Include="unit_tests\tests\bigint_test.h" />
+    <ClInclude Include="bigint\bigint.h" />
+    <ClInclude Include="ed25519\ed25519.h" />
     <ClInclude Include="hash\sha512.h" />
     <ClInclude Include="hash\sha256.h" />
+    <ClInclude Include="ed25519\keypair.h" />
+    <ClInclude Include="unit_tests\unit_test.h" />
+    <ClInclude Include="unit_tests\unit_tests.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -4,14 +4,14 @@
 
 class SHA512 {
 
-	uint64_t h0;
-	uint64_t h1;
-	uint64_t h2;
-	uint64_t h3;
-	uint64_t h4;
-	uint64_t h5;
-	uint64_t h6;
-	uint64_t h7;
+	uint64_t h0 = 0;
+	uint64_t h1 = 0;
+	uint64_t h2 = 0;
+	uint64_t h3 = 0;
+	uint64_t h4 = 0;
+	uint64_t h5 = 0;
+	uint64_t h6 = 0;
+	uint64_t h7 = 0;
 
 	uint64_t k[80] = {
         0x428a2f98d728ae22, 0x7137449123ef65cd, 0xb5c0fbcfec4d3b2f, 0xe9b5dba58189dbbc, 0x3956c25bf348b538,
