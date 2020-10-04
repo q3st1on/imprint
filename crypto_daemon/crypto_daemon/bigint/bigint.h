@@ -17,6 +17,7 @@ public:
 	//Static properties
 	static const BigInt ZERO;
 	static const BigInt ONE;
+	static const BigInt TWO;
 
 	//Constructors
 	BigInt(std::string);                      //Construct via string                                     "-27"  = -27
@@ -28,6 +29,8 @@ public:
 	BigInt operator-(BigInt); //Subtract
 	BigInt operator*(BigInt); //Multiply
 	BigInt operator/(BigInt); //Divide
+
+	BigInt pow(BigInt);
 
 	BigInt operator-();       //Negate
 

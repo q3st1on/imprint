@@ -5,6 +5,7 @@
 
 const BigInt BigInt::ZERO = BigInt("0");
 const BigInt BigInt::ONE = BigInt("1");
+const BigInt BigInt::TWO = BigInt("2");
 
 std::vector<uint32_t> BigInt::get_lower_digits(BigInt number) {
 	if (this->digits().size() < number.digits().size()) return this->digits();
@@ -54,20 +55,25 @@ BigInt::BigInt(bool negative, std::vector<uint32_t> digits) {
 }
 
 BigInt::BigInt(bool negative, std::vector<unsigned char> original_digits) {
-	std::vector<uint32_t> converted_digits;
-	int padding_element_count = (((original_digits.size() / 4) + 1) * 4) - original_digits.size();
-	if ((original_digits.size() % 4) == 0) padding_element_count -= 4;
-	for (int i = 0; i < padding_element_count; i++) {
-		original_digits.insert(original_digits.begin(), 0);
+	BigInt total = this->ZERO;
+	BigInt current_bit_value = this->ONE;
+	BigInt bit("0");
+
+	int digit_count = original_digits.size();
+	for (int i = (digit_count - 1); i >= 0; i--) {
+		unsigned char digit = original_digits[i];
+		for (int j = 0; j < 8; j++) {
+			if (1 & (digit >> j)) {
+				//Bit is set, add 2 ** bit_number to total
+				total = total + current_bit_value;
+			}
+			current_bit_value = current_bit_value * this->TWO;
+			bit = bit + this->ONE;
+		}
 	}
-	int packed_element_count = original_digits.size() / 4;
-	for (int i = 0; i < packed_element_count; i++) {
-		int base = i * 4;
-		uint32_t digit = SHA256::pack(original_digits[base + 3], original_digits[base + 2], original_digits[base + 1], original_digits[base]);
-		if (digit > this->MAX_DIGIT_AMOUNT) throw "Invalid digits!";
-		converted_digits.push_back(digit);
-	}
-	this->set_digits(converted_digits);
+
+	this->set_negative(negative);
+	this->set_digits(total.digits());
 }
 
 BigInt BigInt::operator+(BigInt number) {
@@ -177,6 +183,20 @@ BigInt BigInt::operator/(BigInt number) {
 		left_side = left_side - number;
 	}
 
+	return result;
+}
+
+BigInt BigInt::pow(BigInt exponent) {
+	if (this->negative()) {
+		BigInt positive_base = -(*this);
+		return -(positive_base.pow(exponent));
+	}
+
+	BigInt result = this->ONE;
+	while (exponent != this->ZERO) {
+		result = result * *this;
+		exponent = exponent - this->ONE;
+	}
 	return result;
 }
 
