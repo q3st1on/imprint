@@ -8,4 +8,4 @@ The secondary goal of this project is learning and thus everything will be writt
 This project currently features:
 * SHA256 and SHA512 hashing
 * Unit testing framework
-* Arbitrary size BigInt supporting the four basic operations, and negative numbers
+* Arbitrary size BigInt supporting the four basic operations, exponents, and negative numbers
