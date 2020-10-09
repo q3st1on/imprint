@@ -48,6 +48,9 @@
     <ClCompile Include="unit_tests\tests\hash\sha512_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ed25519\curve_point.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hash\sha512.h">
@@ -78,6 +81,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="unit_tests\tests\hash\sha512_test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ed25519\curve_point.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
