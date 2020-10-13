@@ -230,12 +230,48 @@ BigInt BigInt::operator/(BigInt number) {
 
 	std::cout << this->value() + " / " + number.value() << std::endl;
 
+	//Can division can be handled natively?
 	if ((*this < this->UINT32_LIMIT) && (number <= this->UINT32_LIMIT)) {
+		std::cout << "NATIVE DIV" << std::endl;
 		uint64_t result = std::stoull(this->value()) / std::stoull(number.value());
 		return BigInt(std::to_string(result));
 	}
 
-	return this->THREE;
+	//Can division be handled via long division?
+	if (number <= this->UINT32_LIMIT) {
+		std::cout << "LONG DIV" << std::endl;
+		BigInt answer;
+		uint32_t remainder = 0;
+		int digit_count = this->digits().size();
+		for (int i = 0; i < digit_count; i++) {
+			std::cout << "digit " + std::to_string(i) + " : " + std::to_string(this->digits()[i]) << std::endl;
+			std::vector<uint32_t> new_digits = {this->digits()[i]};
+			if (remainder != 0) {
+				new_digits.insert(new_digits.begin(), remainder);
+				remainder = 0;
+			}
+			BigInt digit(false, new_digits);
+
+			BigInt answer_digit = (digit / BigInt(std::to_string(number.digits()[0])));
+			int answer_one_digit = answer_digit.digits()[answer_digit.digits().size() - 1];
+			answer_digit = BigInt(false, answer_one_digit);
+
+			remainder = (digit - answer_digit).digits()[0];
+			if (answer != this->ZERO) answer = (answer << this->ONE);
+			answer = answer + BigInt(answer_digit);
+		}
+		return answer;
+	}
+
+	//Find answer through binary search
+	std::cout << "BINSEARCH DIV" << std::endl;
+	BigInt min("1");
+	BigInt max = *this;
+	return this->ZERO;
+
+	for (;;) {
+		BigInt middle = (min + max ) / this->TWO;
+	}
 }
 
 BigInt BigInt::pow(BigInt exponent) {
