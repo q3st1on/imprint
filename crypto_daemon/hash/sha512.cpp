@@ -1,5 +1,8 @@
 #include "sha512.h"
 
+#include <cstring>
+#include <bit>
+
 uint64_t SHA512::pack(uint8_t byte1, uint8_t byte2, uint8_t byte3, uint8_t byte4, uint8_t byte5, uint8_t byte6, uint8_t byte7, uint8_t byte8) {
 	return ((uint64_t) byte1) << 0 |
 		((uint64_t) byte2) << 8 |
@@ -56,8 +59,8 @@ std::vector<unsigned char> SHA512::final() {
 		}
 
 		for (int i = 16; i < 80; i++) {
-			uint64_t s0 = _rotr64(w[i - 15], 1) ^ _rotr64(w[i - 15], 8) ^ (w[i - 15] >> 7);
-			uint64_t s1 = _rotr64(w[i - 2], 19) ^ _rotr64(w[i - 2], 61) ^ (w[i - 2] >> 6);
+			uint64_t s0 = std::rotr(w[i - 15], 1) ^ std::rotr(w[i - 15], 8) ^ (w[i - 15] >> 7);
+			uint64_t s1 = std::rotr(w[i - 2], 19) ^ std::rotr(w[i - 2], 61) ^ (w[i - 2] >> 6);
 			w[i] = (w[i - 16] + s0 + w[i - 7] + s1);
 		}
 
@@ -71,10 +74,10 @@ std::vector<unsigned char> SHA512::final() {
 		uint64_t h = h7;
 
 		for (int i = 0; i < 80; i++) {
-			uint64_t S1 = _rotr64(e, 14) ^ _rotr64(e, 18) ^ _rotr64(e, 41);
+			uint64_t S1 = std::rotr(e, 14) ^ std::rotr(e, 18) ^ std::rotr(e, 41);
 			uint64_t ch = (e & f) ^ ((~e) & g);
 			uint64_t temp1 = h + S1 + ch + k[i] + w[i];
-			uint64_t S0 = _rotr64(a, 28) ^ _rotr64(a, 34) ^ _rotr64(a, 39);
+			uint64_t S0 = std::rotr(a, 28) ^ std::rotr(a, 34) ^ std::rotr(a, 39);
 			uint64_t maj = (a & b) ^ (a & c) ^ (b & c);
 			uint64_t temp2 = S0 + maj;
 

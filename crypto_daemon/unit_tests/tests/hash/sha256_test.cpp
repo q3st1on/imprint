@@ -1,7 +1,7 @@
 #include "sha256_test.h"
 #include <vector>
 
-#include "../../hash/sha256.h"
+#include "../../../hash/sha256.h"
 #include <iostream>
 
 TEST_RESULT sha256_basic_hash() {

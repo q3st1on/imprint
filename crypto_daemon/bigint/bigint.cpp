@@ -235,8 +235,7 @@ BigInt BigInt::operator/(BigInt number) {
 		return BigInt(std::to_string(result));
 	}
 
-	//Binary search through multplication
-	BigInt 
+	return this->THREE;
 }
 
 BigInt BigInt::pow(BigInt exponent) {

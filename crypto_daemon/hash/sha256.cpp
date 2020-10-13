@@ -1,5 +1,8 @@
 #include "sha256.h"
 
+#include <cstring>
+#include <bit>
+
 uint32_t SHA256::pack(uint8_t byte1, uint8_t byte2, uint8_t byte3, uint8_t byte4) {
 	return byte1 << 0 |
 		byte2 << 8 |
@@ -51,8 +54,8 @@ std::vector<unsigned char> SHA256::final() {
 		}
 
 		for (int i = 16; i < 64; i++) {
-			uint32_t s0 = _rotr(w[i - 15], 7) ^ _rotr(w[i - 15], 18) ^ (w[i - 15] >> 3);
-			uint32_t s1 = _rotr(w[i - 2], 17) ^ _rotr(w[i - 2], 19) ^ (w[i - 2] >> 10);
+			uint32_t s0 = std::rotr(w[i - 15], 7) ^ std::rotr(w[i - 15], 18) ^ (w[i - 15] >> 3);
+			uint32_t s1 = std::rotr(w[i - 2], 17) ^ std::rotr(w[i - 2], 19) ^ (w[i - 2] >> 10);
 			w[i] = (w[i - 16] + s0 + w[i - 7] + s1);
 		}
 
@@ -66,10 +69,10 @@ std::vector<unsigned char> SHA256::final() {
 		uint32_t h = h7;
 
 		for (int i = 0; i < 64; i++) {
-			uint32_t S1 = _rotr(e, 6) ^ _rotr(e, 11) ^ _rotr(e, 25);
+			uint32_t S1 = std::rotr(e, 6) ^ std::rotr(e, 11) ^ std::rotr(e, 25);
 			uint32_t ch = (e & f) ^ ((~e) & g);
 			uint32_t temp1 = h + S1 + ch + k[i] + w[i];
-			uint32_t S0 = _rotr(a, 2) ^ _rotr(a, 13) ^ _rotr(a, 22);
+			uint32_t S0 = std::rotr(a, 2) ^ std::rotr(a, 13) ^ std::rotr(a, 22);
 			uint32_t maj = (a & b) ^ (a & c) ^ (b & c);
 			uint32_t temp2 = S0 + maj;
 

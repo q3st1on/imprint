@@ -1,7 +1,7 @@
 #include "sha256_test.h"
 #include <vector>
 
-#include "../../hash/sha512.h"
+#include"../../../hash/sha512.h"
 #include <iostream>
 
 TEST_RESULT sha512_basic_hash() {
