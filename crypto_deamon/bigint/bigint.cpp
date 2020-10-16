@@ -237,9 +237,6 @@ BigInt BigInt::operator/(BigInt number) {
 	if ((*this < this->NATIVE_SAFE_LIMIT) && (number <= this->NATIVE_SAFE_LIMIT)) {
 	        std::cout << "NATIVE DIV" << std::endl;
 	        uint64_t result = std::stoull(this->value()) / std::stoull(number.value());
-	        double D = std::stoull(number.value());
-	        double N = std::stoull(this->value());
-	        std::cout << "N: " + std::to_string(N) + "  ||  D: " + std::to_string(D) << std::endl;
 	        std::cout << "native result: " + std::to_string(result) << std::endl;
 	        return BigInt(std::to_string(result));
 	}
@@ -251,7 +248,6 @@ BigInt BigInt::operator/(BigInt number) {
 		std::cout << "GOLDSHMIDT DIV" << std::endl;
                 double D = std::stoull(number.value());
                 double N = std::stoull(this->value());
-                std::cout << "N: " + std::to_string(N) + "  ||  D: " + std::to_string(D) << std::endl;
 		result = (N*(1/D));
 	        std::cout << std::to_string(result) << std::endl;
 	        //if (result < 1) {result=0;}
@@ -263,9 +259,6 @@ BigInt BigInt::operator/(BigInt number) {
 	//Can division be handled via long division?
 	if (number <= this->UINT32_LIMIT) {
 	        std::cout << "LONG DIV" << std::endl;
-                double D = std::stoull(number.value());
-                double N = std::stoull(this->value());
-                std::cout << "N: " + std::to_string(N) + "  ||  D: " + std::to_string(D) << std::endl;
 		BigInt answer;
 	        uint32_t remainder = 0;
 	        int digit_count = this->digits().size();
