@@ -21,6 +21,8 @@ public:
 	static const BigInt THREE;
 	static const BigInt HUNDRED_THOUSAND;
 	static const BigInt UINT32_LIMIT;
+	static const BigInt GOLDSHMIDT_LIMIT;
+	static const BigInt NATIVE_SAFE_LIMIT;
 
 	//Constructors
 	BigInt(std::string);                      //Construct via string                                     "-27"  = -27
@@ -59,7 +61,6 @@ public:
 	BigInt get_complement(int);
 	void push_digit(uint32_t);
 	BigInt remove_leading_zeros();
-
 	bool negative();
 	void set_negative(bool);
 };
