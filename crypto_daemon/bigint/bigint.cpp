@@ -249,16 +249,16 @@ BigInt BigInt::operator/(BigInt number) {
                 double D = std::stoull(number.value());
                 double N = std::stoull(this->value());
 		result = (N*(1/D));
-	        std::cout << std::to_string(result) << std::endl;
 	        //if (result < 1) {result=0;}
-		fresult = (int)result;
+		fresult = static_cast<uint64_t>(result);
+		std::cout << "goldshmit result:" + std::to_string(fresult) << std::endl;
 		return BigInt(std::to_string(fresult));
         }
 
 
 	//Can division be handled via long division?
 	if (number <= this->UINT32_LIMIT) {
-	        std::cout << "LONG DIV" << std::endl;
+	  std::cout << "LONG DIV" << std::endl;
 		BigInt answer;
 	        uint32_t remainder = 0;
 	        int digit_count = this->digits().size();
@@ -281,6 +281,7 @@ BigInt BigInt::operator/(BigInt number) {
 	        }
 	        return answer;
 	}
+
 	//Find answer through binary search
 	std::cout << "BINSEARCH DIV" << std::endl;
 	BigInt min("1");
