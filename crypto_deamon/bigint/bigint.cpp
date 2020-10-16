@@ -8,7 +8,10 @@ const BigInt BigInt::ONE = BigInt("1");
 const BigInt BigInt::TWO = BigInt("2");
 const BigInt BigInt::THREE = BigInt("3");
 const BigInt BigInt::HUNDRED_THOUSAND = BigInt("100000");
+const BigInt BigInt::NATIVE_SAFE_LIMIT = BigInt("999999999");
 const BigInt BigInt::UINT32_LIMIT = BigInt("4294967295");
+const BigInt BigInt::GOLDSHMIDT_LIMIT = BigInt("10000000000000");
+
 
 std::vector<uint32_t> BigInt::get_lower_digits(BigInt number) {
 	if (this->digits().size() < number.digits().size()) return this->digits();
@@ -34,7 +37,7 @@ BigInt::BigInt(std::string value) {
 	int length = value.length();
 	int lowest_multiple_of_nine = ((length / 9) + 1) * 9;
 	if ((length % 9) == 0) lowest_multiple_of_nine = length; //If number was already a multiple of 9, then it is the lowest multiple
-	
+
 	//Left pad string with zeros resulting in a string with a number of digits that is a multiple of 9 (each uint32_t represents 9 digits)
 	int left_padding_amount = lowest_multiple_of_nine - length;
 	value = std::string(left_padding_amount, '0') + value;
@@ -231,38 +234,60 @@ BigInt BigInt::operator/(BigInt number) {
 	std::cout << this->value() + " / " + number.value() << std::endl;
 
 	//Can division can be handled natively?
-	if ((*this < this->UINT32_LIMIT) && (number <= this->UINT32_LIMIT)) {
-		std::cout << "NATIVE DIV" << std::endl;
-		uint64_t result = std::stoull(this->value()) / std::stoull(number.value());
-		return BigInt(std::to_string(result));
+	if ((*this < this->NATIVE_SAFE_LIMIT) && (number <= this->NATIVE_SAFE_LIMIT)) {
+	        std::cout << "NATIVE DIV" << std::endl;
+	        uint64_t result = std::stoull(this->value()) / std::stoull(number.value());
+	        double D = std::stoull(number.value());
+	        double N = std::stoull(this->value());
+	        std::cout << "N: " + std::to_string(N) + "  ||  D: " + std::to_string(D) << std::endl;
+	        std::cout << "native result: " + std::to_string(result) << std::endl;
+	        return BigInt(std::to_string(result));
 	}
+
+	//Is Goldschmidt division required?
+        if ((*this <= this->GOLDSHMIDT_LIMIT) && (number <= this->GOLDSHMIDT_LIMIT)) {
+	        double result;
+	        uint64_t fresult;
+		std::cout << "GOLDSHMIDT DIV" << std::endl;
+                double D = std::stoull(number.value());
+                double N = std::stoull(this->value());
+                std::cout << "N: " + std::to_string(N) + "  ||  D: " + std::to_string(D) << std::endl;
+		result = (N*(1/D));
+	        std::cout << std::to_string(result) << std::endl;
+	        //if (result < 1) {result=0;}
+		fresult = (int)result;
+		return BigInt(std::to_string(fresult));
+        }
+
 
 	//Can division be handled via long division?
 	if (number <= this->UINT32_LIMIT) {
-		std::cout << "LONG DIV" << std::endl;
+	        std::cout << "LONG DIV" << std::endl;
+                double D = std::stoull(number.value());
+                double N = std::stoull(this->value());
+                std::cout << "N: " + std::to_string(N) + "  ||  D: " + std::to_string(D) << std::endl;
 		BigInt answer;
-		uint32_t remainder = 0;
-		int digit_count = this->digits().size();
-		for (int i = 0; i < digit_count; i++) {
-			std::cout << "digit " + std::to_string(i) + " : " + std::to_string(this->digits()[i]) << std::endl;
-			std::vector<uint32_t> new_digits = {this->digits()[i]};
-			if (remainder != 0) {
-				new_digits.insert(new_digits.begin(), remainder);
-				remainder = 0;
-			}
-			BigInt digit(false, new_digits);
+	        uint32_t remainder = 0;
+	        int digit_count = this->digits().size();
+	        for (int i = 0; i < digit_count; i++) {
+	                std::cout << "digit " + std::to_string(i) + " : " + std::to_string(this->digits()[i]) << std::endl;
+	                std::vector<uint32_t> new_digits = {this->digits()[i]};
+	                if (remainder != 0) {
+	                        new_digits.insert(new_digits.begin(), remainder);
+	                        remainder = 0;
+	                }
+	                BigInt digit(false, new_digits);
 
-			BigInt answer_digit = (digit / BigInt(std::to_string(number.digits()[0])));
-			int answer_one_digit = answer_digit.digits()[answer_digit.digits().size() - 1];
-			answer_digit = BigInt(false, answer_one_digit);
+	                BigInt answer_digit = (digit / BigInt(std::to_string(number.digits()[0])));
+	                int answer_one_digit = answer_digit.digits()[answer_digit.digits().size() - 1];
+	                answer_digit = BigInt(false, answer_one_digit);
 
-			remainder = (digit - answer_digit).digits()[0];
-			if (answer != this->ZERO) answer = (answer << this->ONE);
-			answer = answer + BigInt(answer_digit);
-		}
-		return answer;
+	                remainder = (digit - answer_digit).digits()[0];
+	                if (answer != this->ZERO) answer = (answer << this->ONE);
+	                answer = answer + BigInt(answer_digit);
+	        }
+	        return answer;
 	}
-
 	//Find answer through binary search
 	std::cout << "BINSEARCH DIV" << std::endl;
 	BigInt min("1");
