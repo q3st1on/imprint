@@ -19,6 +19,8 @@ public:
 	static const BigInt ONE;
 	static const BigInt TWO;
 	static const BigInt THREE;
+	static const BigInt FOUR;
+	static const BigInt FIFTEEN;
 	static const BigInt HUNDRED_THOUSAND;
 	static const BigInt UINT32_LIMIT;
 	static const BigInt GOLDSHMIDT_LIMIT;
@@ -43,6 +45,10 @@ public:
 
 	//Bitshifts (since BigInt is an arbitrary precision data type, bits don't "fall off" the left or right side. Instead, the size of the digits vector changes)
 	BigInt operator<<(BigInt);       //Left bitshift
+	BigInt operator>>(BigInt);
+
+
+	BigInt modulo(BigInt); //modulo
 
 	bool operator==(BigInt);   //Equal to
 	bool operator!=(BigInt);   //Not equal to
@@ -63,4 +69,7 @@ public:
 	BigInt remove_leading_zeros();
 	bool negative();
 	void set_negative(bool);
+	BigInt CeilLog2(BigInt);
+	BigInt sprecip(BigInt, BigInt);
+	BigInt barmodmul(BigInt, BigInt, BigInt, BigInt, BigInt);
 };

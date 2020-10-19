@@ -7,6 +7,8 @@ const BigInt BigInt::ZERO = BigInt("0");
 const BigInt BigInt::ONE = BigInt("1");
 const BigInt BigInt::TWO = BigInt("2");
 const BigInt BigInt::THREE = BigInt("3");
+const BigInt BigInt::FOUR = BigInt("4");
+const BigInt BigInt::FIFTEEN = BigInt("15");
 const BigInt BigInt::HUNDRED_THOUSAND = BigInt("100000");
 const BigInt BigInt::NATIVE_SAFE_LIMIT = BigInt("999999999");
 const BigInt BigInt::UINT32_LIMIT = BigInt("4294967295");
@@ -322,6 +324,39 @@ BigInt BigInt::operator<<(BigInt shift_amount) {
 	return BigInt(false, shifted_digits);
 }
 
+BigInt BigInt::operator>>(BigInt shift_amount) {
+        std::vector<uint32_t> shifted_digits = this->digits();
+        while (shift_amount > this->ZERO) {
+                shifted_digits.insert(shifted_digits.begin(), (uint32_t) 0);
+                shift_amount = shift_amount - this->ONE;
+        }
+        return BigInt(false, shifted_digits);
+}
+
+BigInt BigInt::modulo(BigInt B, BigInt X, BigInt M) {
+    BigInt S, D, R;
+
+    S = CeilLog2(M);
+    R = sprecip(M, S);
+    D = this->ONE;
+    B = B -(B/M)*M;
+    if ((X.value()).back() == 1 || (X.value()).back() == 3 || (X.value()).back() ==5 || (X.value()).back() ==7 || (X.value()).back() ==9)
+    {
+        D = B;
+    }
+
+    while ((X = X >> this->ONE) != this->ZERO)
+    {
+        B = barmodmul(B, B, M, R, S);
+        if ((X.value()).back() == 1 || (X.value()).back() == 3 || (X.value()).back() ==5 || (X.value()).back() ==7 || (X.value()).back() ==9)
+        {
+            D = barmodmul(D, B, M, R, S);
+        }
+    }
+    return D;
+}
+
+
 bool BigInt::operator==(BigInt number) {
 	BigInt stripped_this = this->remove_leading_zeros();
 	BigInt stripped_other = number.remove_leading_zeros();
@@ -345,7 +380,7 @@ bool BigInt::operator!=(BigInt number) {
 bool BigInt::operator>(BigInt number) {
 	if (this->negative() && !number.negative()) return false; //If we are negative and the other number is positive, we cannot be bigger than the other number
 	if (!this->negative() && number.negative()) return false; //If we are positive and the other number is negative, we must be bigger than the other number
-	
+
 	if (this->negative() && number.negative()) {
 		return (-*this) < (-number); //If both numbers are negative, we are bigger if we are smaller when both signs are removed
 	}
@@ -433,7 +468,7 @@ uint32_t BigInt::get_digit_from_back(int digits_from_back) {
 BigInt BigInt::get_complement(int length) {
 	std::vector<uint32_t> complement_digits;
 	int digit_count = this->digits().size();
-	
+
 	int padding_amount = length - digit_count;
 	if (padding_amount < 0) padding_amount = 0;
 	for (int i = 0; i < padding_amount; i++) complement_digits.push_back(this->MAX_DIGIT_AMOUNT);
@@ -465,7 +500,7 @@ BigInt BigInt::remove_leading_zeros() {
 			stripped.push_back(digit);
 		}
 	}
-	
+
 	return BigInt(this->negative(), stripped);
 }
 
@@ -475,4 +510,48 @@ bool BigInt::negative() {
 
 void BigInt::set_negative(bool negative) {
 	this->m_negative = negative;
+}
+
+BigInt BigInt::CeilLog2(BigInt V)
+{
+    BigInt S = this->ZERO;
+
+    while (V > this->ZERO)
+    {
+        S = S + this->ONE;
+        V = V >> this->ONE;
+    }
+    return S;
+}
+
+BigInt BigInt::sprecip(BigInt N, BigInt S)
+{
+    BigInt D(this->ONE);
+    D = D << ((S << this->ONE) - this->ONE);
+    D = D/N;
+    return (BigInt)D;
+}
+
+BigInt BigInt::barmodmul(BigInt A, BigInt B, BigInt M, BigInt R, BigInt S)
+{
+    BigInt P, T;
+
+    P = A;
+    P = P*B;
+
+    if (P >= M)
+    {
+        T = P >> S;
+        T = T * R;
+        T = T >> (S - this->ONE);
+        T = T * M;
+        P = P - T;
+
+        BigInt Ct = this->FOUR;
+        while((P >= M) && (Ct - this->ONE != this->ZERO))
+        {
+            P = P-M;
+        }
+    }
+    return (BigInt)P;
 }
