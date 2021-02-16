@@ -1,4 +1,5 @@
 # Cryptocurrency
+### THIS PROJECT WAS MAINLY HEADED BY AN INDIVIDUAL MY FREINDS AND I ARE NO LONGER ASSOCIATED WITH. WHILE I AM KEEPING THIS CODE PUBLIC AS A RECORD, I AM NOT ENDORSING THE PROJECT'S CREATOR AND WILL NOT BE CONTINUING DEVELOPMENT
 An experimental cryptocurrency project made in an attempt to solve the blockchain scalability problem.
 
 Name will be decided once the project has been developed far enough to merit one.
